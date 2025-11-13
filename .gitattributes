@@ -1,0 +1,5 @@
+# Κρύψε ΟΛΑ τα notebooks από τα language stats
+ml-training/**/*.ipynb linguist-detectable=false
+
+# Φρόντισε τα .py να μετράνε κανονικά ως Python
+ml-training/**/*.py linguist-detectable=true
