@@ -22,7 +22,7 @@ public class ModelService {
 
     @PostConstruct
     public void loadModel() throws Exception {
-        System.out.println("🔄 Loading ONNX model...");
+        System.out.println("Loading ONNX model...");
         
         // 1. Load ONNX model
         env = OrtEnvironment.getEnvironment();
@@ -31,7 +31,7 @@ public class ModelService {
         try (InputStream modelStream = modelResource.getInputStream()) {
             byte[] modelBytes = modelStream.readAllBytes();
             session = env.createSession(modelBytes);
-            System.out.println("✅ ONNX model loaded successfully!");
+            System.out.println("ONNX model loaded successfully!");
         }
 
         // 2. Load labels
@@ -44,7 +44,7 @@ public class ModelService {
                 labels.add(line.trim());
             }
         }
-        System.out.println("✅ Labels loaded: " + labels);
+        System.out.println("Labels loaded: " + labels);
     }
 
     public PredictionResponse predict(byte[] imageBytes) throws Exception {

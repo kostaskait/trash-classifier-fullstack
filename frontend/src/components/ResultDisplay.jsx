@@ -5,15 +5,6 @@ function ResultDisplay({ result }) {
 
   const { predictedClass, confidence, allScores } = result;
 
-  // Emoji mapping για κάθε κλάση
-  const emojiMap = {
-    cardboard: '📦',
-    glass: '🥤',
-    metal: '🔩',
-    paper: '📄',
-    plastic: '♻️',
-  };
-
   return (
     <div style={{ 
       padding: '20px', 
@@ -27,7 +18,6 @@ function ResultDisplay({ result }) {
         Classification Result
       </h2>
 
-      {/* Predicted Class */}
       <div style={{ 
         textAlign: 'center', 
         padding: '20px',
@@ -35,9 +25,6 @@ function ResultDisplay({ result }) {
         borderRadius: '8px',
         marginBottom: '20px'
       }}>
-        <div style={{ fontSize: '48px' }}>
-          {emojiMap[predictedClass] || '🗑️'}
-        </div>
         <h1 style={{ 
           margin: '10px 0',
           textTransform: 'capitalize',
@@ -50,7 +37,6 @@ function ResultDisplay({ result }) {
         </p>
       </div>
 
-      {/* All Scores */}
       <div>
         <h3 style={{ marginBottom: '15px', color: '#555' }}>
           All Predictions:
@@ -72,10 +58,19 @@ function ResultDisplay({ result }) {
                 justifyContent: 'space-between',
                 marginBottom: '5px'
               }}>
-                <span style={{ textTransform: 'capitalize' }}>
-                  {emojiMap[className]} {className}
+                <span style={{ 
+                  textTransform: 'capitalize',
+                  fontWeight: '500',
+                  color: '#333'
+                }}>
+                  {className}
                 </span>
-                <span><strong>{(score * 100).toFixed(2)}%</strong></span>
+                <span style={{ 
+                  fontWeight: 'bold',
+                  color: className === predictedClass ? '#4CAF50' : '#666'
+                }}>
+                  {(score * 100).toFixed(2)}%
+                </span>
               </div>
               <div style={{
                 width: '100%',

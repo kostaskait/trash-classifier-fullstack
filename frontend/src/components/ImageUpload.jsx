@@ -50,7 +50,7 @@ function ImageUpload({ onPrediction }) {
 
   return (
     <div style={{ textAlign: 'center', padding: '20px' }}>
-      <h2>🗑️ Trash Classifier</h2>
+      <h2>Trash Classifier</h2>
       <p>Upload an image of trash to classify it</p>
 
       <input

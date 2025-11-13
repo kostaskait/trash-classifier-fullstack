@@ -52,6 +52,6 @@ public class PredictionController {
 
     @GetMapping("/health")
     public ResponseEntity<String> health() {
-        return ResponseEntity.ok("Backend is running! ✅");
+        return ResponseEntity.ok("Backend is running!");
     }
 }
