@@ -61,7 +61,7 @@ function EnvironmentalInfo() {
       {/* Material Cards Grid */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
         gap: '25px',
         marginBottom: '30px'
       }}>
@@ -72,7 +72,7 @@ function EnvironmentalInfo() {
             style={{
               backgroundColor: 'white',
               borderRadius: '15px',
-              padding: '25px',
+              padding: '18px',
               boxShadow: selectedMaterial?.id === material.id 
                 ? `0 8px 20px ${materialColors[material.material]}40`
                 : '0 2px 8px rgba(0,0,0,0.1)',

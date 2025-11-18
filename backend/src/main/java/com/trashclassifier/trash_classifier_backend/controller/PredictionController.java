@@ -222,23 +222,45 @@ public class PredictionController {
             }
             statistics.put("distribution", classDistribution);
             
-            // Daily trend (last 7 or 30 days)
-            int days = timeframe.equals("week") ? 7 : (timeframe.equals("month") ? 30 : 7);
+            // Daily/Monthly trend
             List<Map<String, Object>> dailyTrend = new java.util.ArrayList<>();
-            
-            for (int i = days - 1; i >= 0; i--) {
-                LocalDateTime dayStart = now.minusDays(i).withHour(0).withMinute(0).withSecond(0);
-                LocalDateTime dayEnd = now.minusDays(i).withHour(23).withMinute(59).withSecond(59);
+
+            if (timeframe.equals("all")) {
+                // ΑΛΛΑΓΗ: Για "all time" δείχνουμε monthly trend για τους τελευταίους 12 μήνες
+                for (int i = 11; i >= 0; i--) {
+                    LocalDateTime monthStart = now.minusMonths(i).withDayOfMonth(1).withHour(0).withMinute(0).withSecond(0);
+                    LocalDateTime monthEnd = now.minusMonths(i).withDayOfMonth(
+                        now.minusMonths(i).toLocalDate().lengthOfMonth()
+                    ).withHour(23).withMinute(59).withSecond(59);
+                    
+                    long count = filteredClassifications.stream()
+                        .filter(c -> c.getCreatedAt().isAfter(monthStart) && c.getCreatedAt().isBefore(monthEnd))
+                        .count();
+                    
+                    Map<String, Object> monthData = new java.util.LinkedHashMap<>();
+                    monthData.put("date", monthStart.toLocalDate().toString());
+                    monthData.put("count", count);
+                    dailyTrend.add(monthData);
+                }
+            } else {
+                // ΠΑΡΑΜΕΝΕΙ: Για "week" και "month" δείχνουμε daily trend
+                int days = timeframe.equals("week") ? 7 : 30;
                 
-                long count = filteredClassifications.stream()
-                    .filter(c -> c.getCreatedAt().isAfter(dayStart) && c.getCreatedAt().isBefore(dayEnd))
-                    .count();
-                
-                Map<String, Object> dayData = new java.util.LinkedHashMap<>();
-                dayData.put("date", dayStart.toLocalDate().toString());
-                dayData.put("count", count);
-                dailyTrend.add(dayData);
+                for (int i = days - 1; i >= 0; i--) {
+                    LocalDateTime dayStart = now.minusDays(i).withHour(0).withMinute(0).withSecond(0);
+                    LocalDateTime dayEnd = now.minusDays(i).withHour(23).withMinute(59).withSecond(59);
+                    
+                    long count = filteredClassifications.stream()
+                        .filter(c -> c.getCreatedAt().isAfter(dayStart) && c.getCreatedAt().isBefore(dayEnd))
+                        .count();
+                    
+                    Map<String, Object> dayData = new java.util.LinkedHashMap<>();
+                    dayData.put("date", dayStart.toLocalDate().toString());
+                    dayData.put("count", count);
+                    dailyTrend.add(dayData);
+                }
             }
+
             statistics.put("dailyTrend", dailyTrend);
             
             return ResponseEntity.ok(statistics);

@@ -15,30 +15,81 @@ function App() {
     setResult(predictionResult);
   };
 
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'home':
-        return (
-          <>
+const renderPage = () => {
+  switch (currentPage) {
+    case 'home':
+  return (
+    <>
+      {/* Hero Section */}
+      <div style={{
+        textAlign: 'center',
+        marginBottom: '40px',
+        padding: '30px 20px',
+        background: 'linear-gradient(135deg, #2D6A4F 0%, #40916C 100%)',
+        borderRadius: '16px',
+        color: 'white',
+        boxShadow: '0 4px 12px rgba(45, 106, 79, 0.2)'
+      }}>
+        <h1 style={{ margin: '0 0 10px 0', fontSize: '36px', fontWeight: '700' }}>
+          Smart Trash Classification
+        </h1>
+        <p style={{ margin: 0, fontSize: '18px', opacity: 0.95 }}>
+          Upload an image and let AI identify the material type for proper recycling
+        </p>
+      </div>
+
+      {/* Two Column Layout */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: result ? 'repeat(auto-fit, minmax(400px, 1fr))' : '1fr',
+        maxWidth: result ? '100%' : '680px',
+        gap: '30px',
+        alignItems: 'start'
+      }}>
+        <ImageUpload onPrediction={handlePrediction} />
+        <ResultDisplay result={result} />
+      </div>
+    </>
+  );
+    case 'history':
+      return <History />;
+    case 'statistics':
+      return <Statistics />;
+    case 'environmental':
+      return <EnvironmentalInfo />;
+    default:
+      return (
+        <>
+          <div style={{
+            textAlign: 'center',
+            marginBottom: '40px',
+            padding: '30px 20px',
+            background: 'linear-gradient(135deg, #2D6A4F 0%, #40916C 100%)',
+            borderRadius: '16px',
+            color: 'white',
+            boxShadow: '0 4px 12px rgba(45, 106, 79, 0.2)'
+          }}>
+            <h1 style={{ margin: '0 0 10px 0', fontSize: '36px', fontWeight: '700' }}>
+              Smart Trash Classification
+            </h1>
+            <p style={{ margin: 0, fontSize: '18px', opacity: 0.95 }}>
+              Upload an image and let AI identify the material type for proper recycling
+            </p>
+          </div>
+
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+            gap: '30px',
+            alignItems: 'start'
+          }}>
             <ImageUpload onPrediction={handlePrediction} />
             <ResultDisplay result={result} />
-          </>
-        );
-      case 'history':
-        return <History />;
-      case 'statistics':
-        return <Statistics />;
-      case 'environmental':
-        return <EnvironmentalInfo />;
-      default:
-        return (
-          <>
-            <ImageUpload onPrediction={handlePrediction} />
-            <ResultDisplay result={result} />
-          </>
-        );
-    }
-  };
+          </div>
+        </>
+      );
+  }
+};
 
   const menuItems = [
     { id: 'home', label: 'Home', icon: '🏠' },

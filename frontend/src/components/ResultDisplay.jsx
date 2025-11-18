@@ -1,73 +1,96 @@
 import React from 'react';
 
 function ResultDisplay({ result }) {
-  if (!result) return null;
+  if (!result) {
+    return null;
+  }
 
-  const { predictedClass, confidence, allScores } = result;
+  const materialColors = {
+    cardboard: '#FF8042',
+    glass: '#00C49F',
+    metal: '#FFBB28',
+    paper: '#0088FE',
+    plastic: '#FF6384'
+  };
+
+  const predictedColor = materialColors[result.predictedClass.toLowerCase()] || '#2D6A4F';
 
   return (
-    <div style={{ 
-      padding: '20px', 
-      maxWidth: '600px', 
-      margin: '20px auto',
-      backgroundColor: '#f5f5f5',
-      borderRadius: '10px',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+    <div style={{
+      backgroundColor: 'white',
+      padding: '30px',
+      borderRadius: '16px',
+      boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+      border: '2px solid #E0E0E0',
+      height: 'fit-content'
     }}>
-      <h2 style={{ textAlign: 'center', color: '#333' }}>
+      <h2 style={{ 
+        marginTop: 0, 
+        marginBottom: '25px',
+        color: '#2D6A4F', 
+        fontSize: '22px' 
+      }}>
         Classification Result
       </h2>
 
-      <div style={{ 
-        textAlign: 'center', 
-        padding: '20px',
-        backgroundColor: 'white',
-        borderRadius: '8px',
-        marginBottom: '20px'
+      {/* Predicted Class */}
+      <div style={{
+        backgroundColor: '#F0F8F5',
+        padding: '25px',
+        borderRadius: '12px',
+        marginBottom: '25px',
+        textAlign: 'center',
+        border: `2px solid ${predictedColor}20`
       }}>
-        <h1 style={{ 
-          margin: '10px 0',
+        <div style={{
+          fontSize: '32px',
+          fontWeight: 'bold',
+          color: predictedColor,
           textTransform: 'capitalize',
-          color: '#4CAF50'
+          marginBottom: '10px'
         }}>
-          {predictedClass}
-        </h1>
-        <p style={{ fontSize: '18px', color: '#666' }}>
-          Confidence: <strong>{(confidence * 100).toFixed(2)}%</strong>
-        </p>
+          {result.predictedClass}
+        </div>
+        <div style={{ fontSize: '15px', color: '#666' }}>
+          Confidence: <span style={{ fontWeight: 'bold', color: '#2D6A4F' }}>
+            {(result.confidence * 100).toFixed(2)}%
+          </span>
+        </div>
       </div>
 
-      <div>
-        <h3 style={{ marginBottom: '15px', color: '#555' }}>
-          All Predictions:
-        </h3>
-        {Object.entries(allScores)
-          .sort(([, a], [, b]) => b - a)
+      {/* All Predictions */}
+      <h3 style={{ 
+        fontSize: '16px', 
+        color: '#2D6A4F', 
+        marginBottom: '15px',
+        marginTop: '25px'
+      }}>
+        All Predictions:
+      </h3>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {Object.entries(result.allScores)
+          .sort((a, b) => b[1] - a[1])
           .map(([className, score]) => (
-            <div
-              key={className}
-              style={{
-                marginBottom: '10px',
-                backgroundColor: 'white',
-                padding: '10px',
-                borderRadius: '5px',
-              }}
-            >
-              <div style={{ 
-                display: 'flex', 
+            <div key={className}>
+              <div style={{
+                display: 'flex',
                 justifyContent: 'space-between',
-                marginBottom: '5px'
+                alignItems: 'center',
+                marginBottom: '6px'
               }}>
-                <span style={{ 
+                <span style={{
                   textTransform: 'capitalize',
+                  fontSize: '14px',
                   fontWeight: '500',
                   color: '#333'
                 }}>
                   {className}
                 </span>
-                <span style={{ 
+                <span style={{
+                  fontSize: '14px',
                   fontWeight: 'bold',
-                  color: className === predictedClass ? '#4CAF50' : '#666'
+                  color: materialColors[className.toLowerCase()] || '#2D6A4F'
                 }}>
                   {(score * 100).toFixed(2)}%
                 </span>
@@ -75,16 +98,19 @@ function ResultDisplay({ result }) {
               <div style={{
                 width: '100%',
                 height: '8px',
-                backgroundColor: '#e0e0e0',
+                backgroundColor: '#E0E0E0',
                 borderRadius: '4px',
                 overflow: 'hidden'
               }}>
-                <div style={{
-                  width: `${score * 100}%`,
-                  height: '100%',
-                  backgroundColor: className === predictedClass ? '#4CAF50' : '#2196F3',
-                  transition: 'width 0.3s ease'
-                }} />
+                <div
+                  style={{
+                    width: `${score * 100}%`,
+                    height: '100%',
+                    backgroundColor: materialColors[className.toLowerCase()] || '#2D6A4F',
+                    transition: 'width 0.5s ease',
+                    borderRadius: '4px'
+                  }}
+                />
               </div>
             </div>
           ))}

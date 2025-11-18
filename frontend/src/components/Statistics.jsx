@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { PieChart, Pie, Cell, BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 function Statistics() {
   const [stats, setStats] = useState(null);
@@ -62,8 +62,8 @@ function Statistics() {
   return (
     <div style={{ padding: '20px', maxWidth: '1400px', margin: '0 auto' }}>
       {/* Header */}
-      <div style={{ marginBottom: '30px' }}>
-        <h1 style={{ textAlign: 'center', marginBottom: '30px', color: '#2D6A4F' }}>
+      <div style={{ marginBottom: '25px' }}>
+        <h1 style={{ textAlign: 'center', marginBottom: '25px', color: '#2D6A4F' }}>
           Statistics Dashboard
         </h1>
 
@@ -72,15 +72,15 @@ function Statistics() {
           display: 'flex',
           justifyContent: 'center',
           gap: '15px',
-          marginBottom: '30px'
+          marginBottom: '25px'
         }}>
           {['week', 'month', 'all'].map((tf) => (
             <button
               key={tf}
               onClick={() => setTimeframe(tf)}
               style={{
-                padding: '12px 28px',
-                fontSize: '15px',
+                padding: '10px 24px',
+                fontSize: '14px',
                 fontWeight: '600',
                 backgroundColor: timeframe === tf ? '#2D6A4F' : 'white',
                 color: timeframe === tf ? 'white' : '#2D6A4F',
@@ -113,41 +113,41 @@ function Statistics() {
       <div style={{
         backgroundColor: '#2D6A4F',
         color: 'white',
-        padding: '30px',
-        borderRadius: '16px',
+        padding: '20px',
+        borderRadius: '12px',
         textAlign: 'center',
-        marginBottom: '40px',
+        marginBottom: '25px',
         boxShadow: '0 4px 12px rgba(45, 106, 79, 0.2)'
       }}>
-        <h2 style={{ margin: '0 0 10px 0', fontSize: '48px' }}>
+        <h2 style={{ margin: '0 0 5px 0', fontSize: '36px' }}>
           {stats.totalClassifications}
         </h2>
-        <p style={{ margin: 0, fontSize: '20px', opacity: 0.9 }}>
+        <p style={{ margin: 0, fontSize: '16px', opacity: 0.9 }}>
           Total Classifications
         </p>
       </div>
 
-      {/* Charts Grid */}
+      {/* Charts Grid - Pie Chart + Detailed Breakdown */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))',
-        gap: '30px',
-        marginBottom: '30px'
+        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+        gap: '20px',
+        marginBottom: '20px'
       }}>
         
         {/* Pie Chart */}
         {stats.distribution && stats.distribution.length > 0 && (
           <div style={{
             backgroundColor: 'white',
-            padding: '25px',
-            borderRadius: '16px',
+            padding: '15px',
+            borderRadius: '12px',
             boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
             border: '1px solid #E0E0E0'
           }}>
-            <h3 style={{ textAlign: 'center', marginBottom: '20px', color: '#2D6A4F' }}>
+            <h3 style={{ textAlign: 'center', marginBottom: '15px', color: '#2D6A4F', fontSize: '16px' }}>
               Material Distribution
             </h3>
-            <ResponsiveContainer width="100%" height={300}>
+            <ResponsiveContainer width="100%" height={220}>
               <PieChart>
                 <Pie
                   data={stats.distribution}
@@ -155,7 +155,7 @@ function Statistics() {
                   nameKey="name"
                   cx="50%"
                   cy="50%"
-                  outerRadius={100}
+                  outerRadius={80}
                   label={(entry) => `${entry.name}: ${entry.count}`}
                 >
                   {stats.distribution.map((entry, index) => (
@@ -168,53 +168,101 @@ function Statistics() {
           </div>
         )}
 
-        {/* Bar Chart */}
+        {/* Detailed Breakdown */}
         {stats.distribution && stats.distribution.length > 0 && (
           <div style={{
             backgroundColor: 'white',
-            padding: '25px',
-            borderRadius: '16px',
+            padding: '15px',
+            borderRadius: '12px',
             boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
             border: '1px solid #E0E0E0'
           }}>
-            <h3 style={{ textAlign: 'center', marginBottom: '20px', color: '#2D6A4F' }}>
-              Classification Count
+            <h3 style={{ textAlign: 'center', marginBottom: '15px', color: '#2D6A4F', fontSize: '16px' }}>
+              Detailed Breakdown
             </h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={stats.distribution}>
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="count" fill="#2D6A4F" />
-              </BarChart>
-            </ResponsiveContainer>
+            <table style={{
+              width: '100%',
+              borderCollapse: 'collapse'
+            }}>
+              <thead>
+                <tr style={{ backgroundColor: '#F8F9FA' }}>
+                  <th style={{ padding: '12px', textAlign: 'left', borderBottom: '2px solid #E0E0E0', color: '#2D6A4F', fontSize: '14px' }}>
+                    Material
+                  </th>
+                  <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #E0E0E0', color: '#2D6A4F', fontSize: '14px' }}>
+                    Count
+                  </th>
+                  <th style={{ padding: '12px', textAlign: 'center', borderBottom: '2px solid #E0E0E0', color: '#2D6A4F', fontSize: '14px' }}>
+                    Percentage
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {stats.distribution.map((item, index) => (
+                  <tr key={index} style={{ borderBottom: '1px solid #F0F0F0' }}>
+                    <td style={{ padding: '12px', textTransform: 'capitalize', fontSize: '14px' }}>
+                      <span style={{
+                        display: 'inline-block',
+                        width: '12px',
+                        height: '12px',
+                        backgroundColor: COLORS[item.name],
+                        marginRight: '10px',
+                        borderRadius: '3px'
+                      }}></span>
+                      {item.name}
+                    </td>
+                    <td style={{ padding: '12px', textAlign: 'center', fontWeight: 'bold', color: '#2D6A4F', fontSize: '14px' }}>
+                      {item.count}
+                    </td>
+                    <td style={{ padding: '12px', textAlign: 'center', fontSize: '14px' }}>
+                      {((item.count / stats.totalClassifications) * 100).toFixed(1)}%
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </div>
 
-      {/* Line Chart - Daily Trend */}
+      {/* Line Chart - Daily/Monthly Trend */}
       {stats.dailyTrend && stats.dailyTrend.length > 0 && (
         <div style={{
           backgroundColor: 'white',
-          padding: '25px',
-          borderRadius: '16px',
+          padding: '15px',
+          borderRadius: '12px',
           boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
           border: '1px solid #E0E0E0',
-          marginBottom: '30px'
+          marginBottom: '20px'
         }}>
-          <h3 style={{ textAlign: 'center', marginBottom: '20px', color: '#2D6A4F' }}>
-            Daily Trend
+          <h3 style={{ textAlign: 'center', marginBottom: '15px', color: '#2D6A4F', fontSize: '16px' }}>
+            {timeframe === 'all' ? 'Monthly Trend' : 'Daily Trend'} {/* ΑΛΛΑΓΗ: Conditional title */}
           </h3>
-          <ResponsiveContainer width="100%" height={300}>
+          <ResponsiveContainer width="100%" height={220}>
             <LineChart data={stats.dailyTrend}>
               <XAxis 
                 dataKey="date" 
-                tickFormatter={(date) => new Date(date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })}
+                tickFormatter={(date) => {
+                  const d = new Date(date);
+                  // ΑΛΛΑΓΗ: Διαφορετικό format για All Time (μήνες) vs Days
+                  if (timeframe === 'all') {
+                    return d.toLocaleDateString('en-GB', { month: 'short', year: '2-digit' });
+                  } else {
+                    return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+                  }
+                }}
               />
               <YAxis />
               <Tooltip 
-                labelFormatter={(date) => new Date(date).toLocaleDateString('en-GB')}
+                labelFormatter={(date) => {
+                  const d = new Date(date);
+                  // ΑΛΛΑΓΗ: Conditional tooltip format
+                  if (timeframe === 'all') {
+                    return d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+                  } else {
+                    return d.toLocaleDateString('en-GB');
+                  }
+                }}
               />
               <Legend />
               <Line 
@@ -228,62 +276,6 @@ function Statistics() {
               />
             </LineChart>
           </ResponsiveContainer>
-        </div>
-      )}
-
-      {/* Detailed Table */}
-      {stats.distribution && stats.distribution.length > 0 && (
-        <div style={{
-          backgroundColor: 'white',
-          padding: '25px',
-          borderRadius: '16px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-          border: '1px solid #E0E0E0'
-        }}>
-          <h3 style={{ textAlign: 'center', marginBottom: '20px', color: '#2D6A4F' }}>
-            Detailed Breakdown
-          </h3>
-          <table style={{
-            width: '100%',
-            borderCollapse: 'collapse'
-          }}>
-            <thead>
-              <tr style={{ backgroundColor: '#F8F9FA' }}>
-                <th style={{ padding: '15px', textAlign: 'left', borderBottom: '2px solid #E0E0E0', color: '#2D6A4F' }}>
-                  Material
-                </th>
-                <th style={{ padding: '15px', textAlign: 'center', borderBottom: '2px solid #E0E0E0', color: '#2D6A4F' }}>
-                  Count
-                </th>
-                <th style={{ padding: '15px', textAlign: 'center', borderBottom: '2px solid #E0E0E0', color: '#2D6A4F' }}>
-                  Percentage
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {stats.distribution.map((item, index) => (
-                <tr key={index} style={{ borderBottom: '1px solid #F0F0F0' }}>
-                  <td style={{ padding: '15px', textTransform: 'capitalize' }}>
-                    <span style={{
-                      display: 'inline-block',
-                      width: '12px',
-                      height: '12px',
-                      backgroundColor: COLORS[item.name],
-                      marginRight: '10px',
-                      borderRadius: '3px'
-                    }}></span>
-                    {item.name}
-                  </td>
-                  <td style={{ padding: '15px', textAlign: 'center', fontWeight: 'bold', color: '#2D6A4F' }}>
-                    {item.count}
-                  </td>
-                  <td style={{ padding: '15px', textAlign: 'center' }}>
-                    {((item.count / stats.totalClassifications) * 100).toFixed(1)}%
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
       )}
     </div>
